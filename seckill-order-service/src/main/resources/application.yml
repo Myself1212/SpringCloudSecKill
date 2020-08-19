@@ -1,0 +1,43 @@
+server:
+  port: 8004
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true #使用ip地址注册
+    instance-id: ${spring.cloud.client.ip-address}:${server.port} #向注册中心中注册服务id
+spring:
+  application:
+    name: seckill-order-service
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/babytun?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: ADMIN
+
+  redis:
+    host: localhost
+    port: 6379
+    database: 6
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    listener:
+      simple:
+        #消息消费者配置核心项
+        #表示定义消费者最多同时处理10个消息，因此可以实现限流削峰，具体数值要在Jmeter进行压力测试获取得到
+        prefetch: 10
+        #消息手动确认
+        acknowledge-mode: manual
+
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  configuration: #开启驼峰命名法
+    map-underscore-to-camel-case: true
